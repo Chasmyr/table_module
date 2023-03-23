@@ -1,0 +1,35 @@
+.table-bordered {
+    width: 100%;
+}
+
+.table-bordered, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+th, td {
+    vertical-align: middle;
+    padding: 10px;
+}
+
+th {
+    height: 40px;
+    text-align: left;
+    background-color: #04AA6D;
+    color: white;
+}
+
+td {
+    height: 30px;
+}
+
+tr:nth-child(even) {background-color: #f2f2f2;}
+
+.table-title-container {
+    display: flex;
+    justify-content: center;
+}
+
+.table-title {
+    margin: 5px;
+}

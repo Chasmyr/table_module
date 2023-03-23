@@ -1,34 +1,56 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import DisplayTable from "./displayTable"
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const tableConf = {
+    title: 'Test titre tableau',
+    searchable: false,
+    pagination: true,
+    defaultNumberOfEntries: 10,
+    columns: [
+      {
+        name: 'Name',
+        orderable: false
+      },
+      {
+        name: 'Age',
+        orderable: true
+      },
+      {
+        name: 'Job',
+        orderable: false
+      },
+      {
+        name: 'Date of Birth',
+        orderable: false
+      }
+    ],
+    rows: [
+      {
+          name: 'Emil',
+          age: 12,
+          job: 'test',
+          dateOfBirth: '25/02/1980'
+      },
+      {
+          name: 'Filip',
+          age: 48,
+          job: 'test2',
+          dateOfBirth: '02/11/2008'
+      },
+      {
+          name: 'Jean',
+          age: 19,
+          job: 'test3',
+          dateOfBirth: '28/04/1988'
+      },
+    ] 
+  }
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
+    <>
+      <DisplayTable config={tableConf} />
+    </>
   )
 }
 
