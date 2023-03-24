@@ -6,42 +6,64 @@ function App() {
     title: 'Test titre tableau',
     searchable: false,
     pagination: true,
-    defaultNumberOfEntries: 10,
+    defaultNumberOfEntries: 2,
     columns: [
       {
         name: 'Name',
-        orderable: false
+        orderable: true,
+        ref: 'name'
       },
       {
         name: 'Age',
-        orderable: true
+        orderable: true,
+        ref: 'age'
       },
       {
         name: 'Job',
-        orderable: false
+        orderable: true,
+        ref: 'job'
       },
       {
         name: 'Date of Birth',
-        orderable: false
+        orderable: true,
+        ref: 'dateOfBirth'
       }
     ],
     rows: [
       {
           name: 'Emil',
           age: 12,
-          job: 'test',
+          job: 'charpentier',
           dateOfBirth: '25/02/1980'
       },
       {
           name: 'Filip',
           age: 48,
-          job: 'test2',
+          job: 'electricien',
           dateOfBirth: '02/11/2008'
       },
       {
           name: 'Jean',
           age: 19,
-          job: 'test3',
+          job: 'pécheur',
+          dateOfBirth: '28/04/1988'
+      },
+      {
+          name: 'Emil',
+          age: 17,
+          job: 'charpentier',
+          dateOfBirth: '25/02/1980'
+      },
+      {
+          name: 'Filip',
+          age: 6,
+          job: 'electricien',
+          dateOfBirth: '02/11/2008'
+      },
+      {
+          name: 'Jean',
+          age: 88,
+          job: 'pécheur',
           dateOfBirth: '28/04/1988'
       },
     ] 
