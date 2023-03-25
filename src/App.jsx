@@ -4,7 +4,7 @@ function App() {
 
   const tableConf = {
     title: 'Test titre tableau',
-    searchable: false,
+    searchable: true,
     pagination: true,
     defaultNumberOfEntries: 2,
     columns: [
@@ -34,37 +34,43 @@ function App() {
           name: 'Emil',
           age: 12,
           job: 'charpentier',
-          dateOfBirth: '25/02/1980'
+          dateOfBirth: '02/25/1980'
       },
       {
           name: 'Filip',
           age: 48,
           job: 'electricien',
-          dateOfBirth: '02/11/2008'
+          dateOfBirth: '11/02/2008'
       },
       {
           name: 'Jean',
           age: 19,
           job: 'pécheur',
-          dateOfBirth: '28/04/1988'
+          dateOfBirth: '04/28/1988'
       },
       {
           name: 'Emil',
           age: 17,
           job: 'charpentier',
-          dateOfBirth: '25/02/1980'
+          dateOfBirth: '02/25/1980'
       },
       {
           name: 'Filip',
           age: 6,
           job: 'electricien',
-          dateOfBirth: '02/11/2008'
+          dateOfBirth: '11/12/2008'
       },
       {
           name: 'Jean',
           age: 88,
           job: 'pécheur',
-          dateOfBirth: '28/04/1988'
+          dateOfBirth: '02/04/1988'
+      },
+      {
+          name: 'Jean',
+          age: 88,
+          job: 'pécheur',
+          dateOfBirth: '05/04/1988'
       },
     ] 
   }
