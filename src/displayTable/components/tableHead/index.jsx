@@ -1,37 +1,22 @@
-const TableHead = ({columns, setToRender, toRender}) => {
-
-    const sortTable = (ref) => {
-        let dataToSort = toRender
-        dataToSort.sort((a, b) => {
-            if(a[ref] < b[ref]) {
-                return -1
-            }
-            if(a[ref] > b[ref]) {
-                return 1
-            }
-
-            return 0
-        })
-
-        console.log(dataToSort)
-        setToRender(dataToSort)
-    }
-
+const TableHead = ({config, sortTable }) => {
     return (
         <thead className="thead">
-            <tr>
-                {columns.map((column, index) => {
-                    if(column.orderable) {
-                        return ( 
-                            <th key={index}>{column.name} <button onClick={() => {sortTable(column.ref)}}>Trier</button></th>
-                        )
-                    } else {
-                        return (
-                            <th key={index}>{column.name}</th>
-                        )
-                    }
-                })}
-            </tr>
+                    <tr>
+                        {config.columns.map((column, index) => {
+                            if(column.orderable) {
+                                return ( 
+                                    <th key={index}>{column.name} 
+                                        <button onClick={() => sortTable(column.ref, 'up')}>Trier</button>
+                                        <button onClick={() => sortTable(column.ref, 'down')}>Trier</button>
+                                    </th>
+                                )
+                            } else {
+                                return (
+                                    <th key={index}>{column.name}</th>
+                                )
+                            }
+                        })}
+                    </tr>
         </thead>
     )
 }

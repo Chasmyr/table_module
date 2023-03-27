@@ -7,6 +7,7 @@ function App() {
     searchable: true,
     pagination: true,
     defaultNumberOfEntries: 2,
+    entriesOptions: [2, 4, 6, 8, 10],
     columns: [
       {
         name: 'Name',

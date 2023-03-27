@@ -6,28 +6,46 @@ import './style.css'
 const DisplayTable = ({config}) => {
 
     const [entriesToShow, setEntriesToShow] = useState(config.defaultNumberOfEntries)
-    const [entiresCount, setEntriesCount] = useState(0)
+    const [entriesCount, setEntriesCount] = useState(0)
     const [searchInput, setSearchInput] = useState('')
     const [toRender, setToRender] = useState(config.rows)
     const [numberOfPage, setNumberOfPage] = useState(0)
     const [currentPage, setCurrentPage] = useState(1)
+    const [pageList, setPageList] = useState(null)
+
 
     useEffect(() => {
         // handle pagination
         if(config.pagination) {
             let dataPaginated = toRender
-            dataPaginated = dataPaginated.slice(entiresCount, entriesToShow)
+            dataPaginated = dataPaginated.slice(entriesCount, entriesToShow)
             setToRender(dataPaginated)
 
             // set the number of page
             if(config.rows.length%entriesToShow === 0) {
                 setNumberOfPage(config.rows.length/entriesToShow)
+                let toReturn = []
+                for(let i = 0; i < config.rows.length/entriesToShow; i++) {
+                    toReturn.push(i + 1)
+                    setPageList(toReturn)
+                }
             } else if (config.rows.length < entriesToShow) {
+                let toReturn = []
+                toReturn.push(1)
+                setPageList(toReturn)
                 setNumberOfPage(1)
             } else {
                 setNumberOfPage(Math.ceil(config.rows.length/entriesToShow))
+                let toReturn = []
+                for(let i = 0; i < Math.ceil(config.rows.length/entriesToShow); i++) {
+                    toReturn.push(i + 1)
+                    setPageList(toReturn)
+                }
             }
         }
+
+        // set pageList
+        
     }, [entriesToShow])
 
     // handle navigation between pages
@@ -35,7 +53,7 @@ const DisplayTable = ({config}) => {
         if(direction === 'next') {
             if(currentPage === numberOfPage) {
                 let newSliceValue = 0
-                let newEntriesValue = entriesToShow
+                let newEntriesValue = Number(entriesToShow)
                 let newPageNumber = 1
 
                 let dataPaginated = config.rows
@@ -47,8 +65,8 @@ const DisplayTable = ({config}) => {
                 setCurrentPage(newPageNumber)
 
             } else {
-                let newSliceValue = entiresCount + entriesToShow
-                let newEntriesValue = entriesToShow + newSliceValue
+                let newSliceValue = entriesCount + Number(entriesToShow)
+                let newEntriesValue = Number(entriesToShow) + newSliceValue
                 let newPageNumber = currentPage + 1
                 
                 let dataPaginated = config.rows
@@ -60,8 +78,8 @@ const DisplayTable = ({config}) => {
             }
         } else if (direction === 'prev') {
             if(currentPage > 1) {
-                let newSliceValue = entiresCount - entriesToShow
-                let newEntriesValue = entriesToShow + newSliceValue
+                let newSliceValue = entriesCount - Number(entriesToShow)
+                let newEntriesValue = Number(entriesToShow) + newSliceValue
                 let newPageNumber = currentPage - 1
                     
                 let dataPaginated = config.rows
@@ -84,9 +102,10 @@ const DisplayTable = ({config}) => {
             }
         } else {
             // ajouter du code ici pour gérer les btns de page
+            // faut re render
             let newPageNumber = direction
-            let defaultSliceValue = 0
-            let defaultEntriesValue = entriesToShow
+            let defaultSliceValue = entriesToShow*(direction - 1)
+            let defaultEntriesValue = entriesToShow*direction
 
             let dataPaginated = config.rows
             dataPaginated = dataPaginated.slice(defaultSliceValue, defaultEntriesValue)
@@ -141,7 +160,7 @@ const DisplayTable = ({config}) => {
             if(currentPage > 1) {
                 setToRender(dataToReturn.slice(0, entriesToShow))
             } else {
-                setToRender(dataToReturn.slice(entiresCount, entriesToShow))
+                setToRender(dataToReturn.slice(entriesCount, entriesToShow))
             }
             handlePagination(1)
         } else {
@@ -202,7 +221,7 @@ const DisplayTable = ({config}) => {
             if(currentPage > 1) {
                 dataSorted = dataSorted.slice(0, entriesToShow)
             } else {
-                dataSorted = dataSorted.slice(entiresCount, entriesToShow)
+                dataSorted = dataSorted.slice(entriesCount, entriesToShow)
             }
             handlePagination(1)
         } else {
@@ -213,6 +232,7 @@ const DisplayTable = ({config}) => {
 
     // select the number of entries u want
     const changeEntriesToShow = (number) => {
+        handlePagination(1)
         setEntriesToShow(number)
     }
 
@@ -229,11 +249,11 @@ const DisplayTable = ({config}) => {
                         <div className='pagination'>
                             <div className='custom-select'>
                                 <select onChange={(e) => {changeEntriesToShow(e.target.value)}}>
-                                    <option value={2}>2</option>
-                                    <option value={4}>4</option>
-                                    <option value={6}>6</option>
-                                    <option value={8}>8</option>
-                                    <option value={10}>10</option>
+                                    {config.entriesOptions.map((e, index) => {
+                                        return (
+                                            <option key={index} value={e}>{e}</option>
+                                        )
+                                    })}
                                 </select>
                             </div>
                         </div>
@@ -258,37 +278,8 @@ const DisplayTable = ({config}) => {
                 </>}
             <div className='table-container'>
                 <table className='table-bordered'>
-                <thead className="thead">
-                    <tr>
-                        {config.columns.map((column, index) => {
-                            if(column.orderable) {
-                                return ( 
-                                    <th key={index}>{column.name} 
-                                        <button onClick={() => sortTable(column.ref, 'up')}>Trier</button>
-                                        <button onClick={() => sortTable(column.ref, 'down')}>Trier</button>
-                                    </th>
-                                )
-                            } else {
-                                return (
-                                    <th key={index}>{column.name}</th>
-                                )
-                            }
-                        })}
-                    </tr>
-                </thead>
-                <tbody className="tbody">
-                    {toRender !== null && toRender.map((row, index) => {
-                        return (
-                            <tr key={index}>
-                                {Object.keys(row).map((key) => {
-                                    return (
-                                        <td key={key}>{row[key]}</td>
-                                    )
-                                })}
-                            </tr>
-                        )
-                    })}
-                </tbody>
+                <TableHead config={config} sortTable={sortTable} />
+                <TableBody toRender={toRender} />
                 </table>
                 {config.pagination && 
                     <div className='pagination-info'>
@@ -300,6 +291,13 @@ const DisplayTable = ({config}) => {
                             {numberOfPage > 1 &&
                                 <>  
                                     <button onClick={() => {handlePagination('prev')}} >Prev page</button>
+                                    <div className='page-btn'>
+                                        {pageList !== null && pageList.map((e, index) => {
+                                            return (
+                                                <button onClick={() => {handlePagination(e); console.log(toRender)}} key={index} >{e}</button>
+                                            )
+                                        })}
+                                    </div>
                                     <button onClick={() => {handlePagination('next')}} >Next page</button>
                                 </>
                             }

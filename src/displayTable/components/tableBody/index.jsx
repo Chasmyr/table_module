@@ -1,8 +1,8 @@
-const TableBody = ({rows}) => {
+const TableBody = ({toRender}) => {
 
     return (
         <tbody className="tbody">
-            {rows.map((row, index) => {
+            {toRender !== null && toRender.map((row, index) => {
                 return (
                     <tr key={index}>
                         {Object.keys(row).map((key) => {
