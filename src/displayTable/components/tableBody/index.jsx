@@ -7,7 +7,7 @@ const TableBody = ({toRender}) => {
                     <tr key={index}>
                         {Object.keys(row).map((key) => {
                             return (
-                                <td key={key}>{row[key]}</td>
+                                <td key={key} className="td">{row[key]}</td>
                             )
                         })}
                     </tr>

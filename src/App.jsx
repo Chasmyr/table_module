@@ -11,7 +11,7 @@ function App() {
     columns: [
       {
         name: 'Name',
-        orderable: true,
+        orderable: false,
         ref: 'name'
       },
       {
@@ -21,7 +21,7 @@ function App() {
       },
       {
         name: 'Job',
-        orderable: true,
+        orderable: false,
         ref: 'job'
       },
       {

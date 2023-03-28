@@ -1,3 +1,5 @@
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState, useEffect } from 'react'
 import TableBody from './components/tableBody'
 import TableHead from './components/tableHead'
@@ -17,7 +19,7 @@ const DisplayTable = ({config}) => {
     useEffect(() => {
         // handle pagination
         if(config.pagination) {
-            let dataPaginated = toRender
+            let dataPaginated = config.rows
             dataPaginated = dataPaginated.slice(entriesCount, entriesToShow)
             setToRender(dataPaginated)
 
@@ -135,7 +137,6 @@ const DisplayTable = ({config}) => {
             })
         } else {
             dataToReturn = toRender
-            console.log(dataToReturn)
             toRender.map((item) => {
                 Object.keys(item).map((key) => {
                     if(item[key].toString().toLocaleLowerCase().includes(e.target.value.toLocaleLowerCase())) {
@@ -164,7 +165,6 @@ const DisplayTable = ({config}) => {
             }
             handlePagination(1)
         } else {
-            console.log(dataSearched)
             setToRender(dataToReturn)
         }
     }
@@ -176,7 +176,6 @@ const DisplayTable = ({config}) => {
             dataSorted = config.rows
         } else {
             dataSorted = toRender
-            console.log(dataSorted)
         }
         dataSorted.sort((a, b) => {
             // format and sort date if the format is "xx/xx/xxxx"
@@ -237,7 +236,7 @@ const DisplayTable = ({config}) => {
     }
 
     return (
-        <div>
+        <div className='table-module'>
             <div className='table-title-container'>
                 <h2 className='table-title'>{config.title}</h2>
             </div>
@@ -271,37 +270,51 @@ const DisplayTable = ({config}) => {
                         config.pagination && 
                         <div className='table-pagination-option'>
                             <div className='pagination'>
-                                <button onClick={() => {changeEntriesToShow(5)}}>pagination</button>
+                                <div className='custom-select'>
+                                    <select onChange={(e) => {changeEntriesToShow(e.target.value)}}>
+                                        {config.entriesOptions.map((e, index) => {
+                                            return (
+                                                <option key={index} value={e}>{e}</option>
+                                            )
+                                        })}
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     }
                 </>}
             <div className='table-container'>
                 <table className='table-bordered'>
-                <TableHead config={config} sortTable={sortTable} />
-                <TableBody toRender={toRender} />
+                    <TableHead config={config} sortTable={sortTable} />
+                    <TableBody toRender={toRender} />
                 </table>
                 {config.pagination && 
                     <div className='pagination-info'>
                         <div className='pagination-desc'>
                             <p>Show {config.rows.length < entriesToShow ? config.rows.length : toRender.length} entries of {config.rows.length}</p>
-                        </div>
-                        <div className='pagination-options'>
-                            <p>Page {currentPage} of {numberOfPage}</p>
                             {numberOfPage > 1 &&
-                                <>  
-                                    <button onClick={() => {handlePagination('prev')}} >Prev page</button>
-                                    <div className='page-btn'>
-                                        {pageList !== null && pageList.map((e, index) => {
-                                            return (
-                                                <button onClick={() => {handlePagination(e); console.log(toRender)}} key={index} >{e}</button>
-                                            )
-                                        })}
-                                    </div>
-                                    <button onClick={() => {handlePagination('next')}} >Next page</button>
-                                </>
+                                <p>Page {currentPage} of {numberOfPage}</p>
                             }
                         </div>
+                        {numberOfPage > 1 &&
+                            <div className='pagination-options'>  
+                                <button onClick={() => {handlePagination('prev')}} className="pagination-btn pagination-prev"><FontAwesomeIcon icon={faChevronLeft} /></button>
+                                <div className='page-btn'>
+                                    {pageList !== null && pageList.map((e, index) => {
+                                        if(e === currentPage) {
+                                            return (
+                                                <button onClick={() => {handlePagination(e)}} key={index} className="pagination-page-btn page-btn-active" >{e}</button>
+                                            )
+                                        } else {
+                                            return (
+                                                <button onClick={() => {handlePagination(e)}} key={index} className="pagination-page-btn" >{e}</button>
+                                            )
+                                        }
+                                    })}
+                                </div>
+                                <button onClick={() => {handlePagination('next')}} className="pagination-btn pagination-next" ><FontAwesomeIcon icon={faChevronRight} /></button>
+                            </div>
+                        }
                     </div>
                 }
             </div>
