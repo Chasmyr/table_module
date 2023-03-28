@@ -15,6 +15,11 @@ function App() {
         ref: 'name'
       },
       {
+        name: 'Hours',
+        orderable: false,
+        ref: 'heure'
+      },
+      {
         name: 'Age',
         orderable: true,
         ref: 'age'
@@ -28,6 +33,11 @@ function App() {
         name: 'Date of Birth',
         orderable: true,
         ref: 'dateOfBirth'
+      },
+      {
+        name: 'test',
+        orderable: false,
+        ref: 'test'
       }
     ],
     rows: [
@@ -35,7 +45,9 @@ function App() {
           name: 'Emil',
           age: 12,
           job: 'charpentier',
-          dateOfBirth: '02/25/1980'
+          dateOfBirth: '02/25/1980',
+          test: 'test',
+          test2: 'test2'
       },
       {
           name: 'Filip',
@@ -52,6 +64,7 @@ function App() {
       {
           name: 'Emil',
           age: 17,
+          heure: '18h',
           job: 'charpentier',
           dateOfBirth: '02/25/1980'
       },

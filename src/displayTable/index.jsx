@@ -15,7 +15,6 @@ const DisplayTable = ({config}) => {
     const [currentPage, setCurrentPage] = useState(1)
     const [pageList, setPageList] = useState(null)
 
-
     useEffect(() => {
         // handle pagination
         if(config.pagination) {
@@ -286,7 +285,7 @@ const DisplayTable = ({config}) => {
             <div className='table-container'>
                 <table className='table-bordered'>
                     <TableHead config={config} sortTable={sortTable} />
-                    <TableBody toRender={toRender} />
+                    <TableBody toRender={toRender} columns={config.columns} />
                 </table>
                 {config.pagination && 
                     <div className='pagination-info'>
