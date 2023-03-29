@@ -6,7 +6,7 @@ function App() {
     title: 'Test titre tableau',
     searchable: true,
     pagination: true,
-    defaultNumberOfEntries: 1,
+    defaultNumberOfEntries: 2,
     entriesOptions: [2, 4, 6, 8, 10],
     columns: [
       {
