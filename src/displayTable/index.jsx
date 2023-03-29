@@ -1,23 +1,72 @@
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState, useEffect } from 'react'
 import TableBody from './components/tableBody'
 import TableHead from './components/tableHead'
 import './style.css'
+import TableOptions from "./components/tableOptions/index.jsx";
+import TableFooter from "./components/tableFooter/index.jsx";
 
 const DisplayTable = ({config}) => {
 
-    const [entriesToShow, setEntriesToShow] = useState(config.defaultNumberOfEntries)
+    const [entriesToShow, setEntriesToShow] = useState(null)
     const [entriesCount, setEntriesCount] = useState(0)
     const [searchInput, setSearchInput] = useState('')
-    const [toRender, setToRender] = useState(config.rows)
+    const [toRender, setToRender] = useState(null)
     const [numberOfPage, setNumberOfPage] = useState(0)
     const [currentPage, setCurrentPage] = useState(1)
     const [pageList, setPageList] = useState(null)
+    const [isLoaded, setIsLoaded] = useState(false)
 
     useEffect(() => {
+        // handle default conf
+        if(config.title === undefined) {
+            config.title = 'Default Table Title'
+        }
+        if(config.searchable === undefined) {
+            config.searchable = false
+        }
+        if(config.pagination === undefined) {
+            config.pagination = false
+        }
+        if(config.columns === undefined) {
+            config.columns = [
+                {
+                    name: 'Name',
+                    orderable: false,
+                    ref: 'name'
+                },
+                {
+                    name: 'Test',
+                    orderable: false,
+                    ref: 'test'
+                }
+            ]
+        }
+        if(config.rows === undefined) {
+            config.rows = [
+                {
+                    name: 'Default',
+                    test: 'test'
+                },
+                {
+                    name: 'Table',
+                    test: 'test'
+                }
+            ]
+        }
+        if(config.defaultNumberOfEntries === undefined) {
+            config.defaultNumberOfEntries = 10
+        } else if(entriesToShow === null) {
+            setEntriesToShow(config.defaultNumberOfEntries)
+        }
+        if(config.entriesOptions === undefined) {
+            if(config.defaultNumberOfEntries !== undefined) {
+                config.entriesOptions = [config.defaultNumberOfEntries,20,50]
+            }
+        }
+
+
         // handle pagination
-        if(config.pagination) {
+        if(config.pagination && entriesToShow !== null) {
             let dataPaginated = config.rows
             dataPaginated = dataPaginated.slice(entriesCount, entriesToShow)
             setToRender(dataPaginated)
@@ -43,10 +92,14 @@ const DisplayTable = ({config}) => {
                     setPageList(toReturn)
                 }
             }
+        } else {
+            setToRender(config.rows)
         }
 
-        // set pageList
-        
+        if(config.title !== undefined && config.searchable !== undefined && config.pagination !== undefined && config.defaultNumberOfEntries !== undefined && config.entriesOptions !== undefined && config.columns !== undefined && config.rows !== undefined && entriesToShow !== null) {
+            setIsLoaded(true)
+        }
+
     }, [entriesToShow])
 
     // handle navigation between pages
@@ -60,7 +113,7 @@ const DisplayTable = ({config}) => {
                 let dataPaginated = config.rows
                 dataPaginated = dataPaginated.slice(newSliceValue, newEntriesValue)
 
-                
+
                 setEntriesCount(newSliceValue)
                 setToRender(dataPaginated)
                 setCurrentPage(newPageNumber)
@@ -69,10 +122,10 @@ const DisplayTable = ({config}) => {
                 let newSliceValue = entriesCount + Number(entriesToShow)
                 let newEntriesValue = Number(entriesToShow) + newSliceValue
                 let newPageNumber = currentPage + 1
-                
+
                 let dataPaginated = config.rows
                 dataPaginated = dataPaginated.slice(newSliceValue, newEntriesValue)
-    
+
                 setEntriesCount(newSliceValue)
                 setToRender(dataPaginated)
                 setCurrentPage(newPageNumber)
@@ -82,28 +135,26 @@ const DisplayTable = ({config}) => {
                 let newSliceValue = entriesCount - Number(entriesToShow)
                 let newEntriesValue = Number(entriesToShow) + newSliceValue
                 let newPageNumber = currentPage - 1
-                    
+
                 let dataPaginated = config.rows
                 dataPaginated = dataPaginated.slice(newSliceValue, newEntriesValue)
-        
+
                 setEntriesCount(newSliceValue)
                 setToRender(dataPaginated)
                 setCurrentPage(newPageNumber)
             } else {
                 let newSliceValue = config.rows.length - (config.rows.length - (entriesToShow*(numberOfPage-1)))
-                let newEntriesValue = config.rows.length 
+                let newEntriesValue = config.rows.length
                 let newPageNumber = numberOfPage
 
                 let dataPaginated = config.rows
                 dataPaginated = dataPaginated.slice(newSliceValue, newEntriesValue)
-        
+
                 setEntriesCount(newSliceValue)
                 setToRender(dataPaginated)
                 setCurrentPage(newPageNumber)
             }
         } else {
-            // ajouter du code ici pour gérer les btns de page
-            // faut re render
             let newPageNumber = direction
             let defaultSliceValue = entriesToShow*(direction - 1)
             let defaultEntriesValue = entriesToShow*direction
@@ -117,205 +168,28 @@ const DisplayTable = ({config}) => {
         }
     }
 
-    // function to handle search action
-    const searchAction = (e) => {
-        setSearchInput(e.target.value)
-        let dataSearched = []
-        let dataToReturn
-
-        if(config.pagination) {
-            dataToReturn = config.rows
-            config.rows.map((item) => {
-                Object.keys(item).map((key) => {
-                    if(item[key].toString().toLocaleLowerCase().includes(e.target.value.toLocaleLowerCase())) {
-                        if(!dataSearched.includes(item)) {
-                            dataSearched.push(item)
-                        }
-                    } 
-                })
-            })
-        } else {
-            dataToReturn = toRender
-            toRender.map((item) => {
-                Object.keys(item).map((key) => {
-                    if(item[key].toString().toLocaleLowerCase().includes(e.target.value.toLocaleLowerCase())) {
-                        if(!dataSearched.includes(item)) {
-                            dataSearched.push(item)
-                        }
-                    } 
-                })
-            })
-        }
-
-        if(dataSearched.length > 0) {
-            dataSearched.map((item) => {
-                if(dataToReturn.includes(item)) {
-                    dataToReturn.splice(dataToReturn.indexOf(item), 1)
-                    dataToReturn.unshift(item)
-                }
-            })
-        }
-
-        if(config.pagination) {
-            if(currentPage > 1) {
-                setToRender(dataToReturn.slice(0, entriesToShow))
-            } else {
-                setToRender(dataToReturn.slice(entriesCount, entriesToShow))
-            }
-            handlePagination(1)
-        } else {
-            setToRender(dataToReturn)
-        }
-    }
-    
-    // function to sort rows
-    const sortTable = (ref, direction) => {
-        let dataSorted
-        if(config.pagination) {
-            dataSorted = config.rows
-        } else {
-            dataSorted = toRender
-        }
-        dataSorted.sort((a, b) => {
-            // format and sort date if the format is "xx/xx/xxxx"
-            if(a[ref][2] === '/' && a[ref][5] === '/') {
-                let date1 = new Date(a[ref])
-                let date2 = new Date(b[ref])
-                if(date1 < date2) {
-                    if(direction ==='up') {
-                        return -1
-                    } else if(direction === 'down') {
-                        return 1
-                    }
-                }
-                if(date1 > date2) {
-                    if(direction ==='up') {
-                        return 1
-                    } else if (direction === 'down') {
-                        return -1
-                    }
-                }
-                return 0
-            } else {
-                if(a[ref] < b[ref]) {
-                    if(direction === 'up') {
-                        return -1
-                    } else if (direction === 'down'){
-                        return 1
-                    }
-                }
-                if(a[ref] > b[ref]) {
-                    if(direction === 'up') {
-                        return 1
-                    } else if (direction === 'down') {
-                        return -1
-                    }
-                }
-                return 0
-            }  
-        })
-        
-        if(config.pagination) {
-            if(currentPage > 1) {
-                dataSorted = dataSorted.slice(0, entriesToShow)
-            } else {
-                dataSorted = dataSorted.slice(entriesCount, entriesToShow)
-            }
-            handlePagination(1)
-        } else {
-            dataSorted = dataSorted.slice()
-        }
-        setToRender(dataSorted) 
-    }
-
-    // select the number of entries u want
-    const changeEntriesToShow = (number) => {
-        handlePagination(1)
-        setEntriesToShow(number)
-    }
-
     return (
         <div className='table-module'>
             <div className='table-title-container'>
                 <h2 className='table-title'>{config.title}</h2>
             </div>
-            {config.searchable && config.pagination ?
-                    <div className='table-full-options'>
-                        <div className='searchBar'>
-                            <input type="text" id='searchInput' onChange={searchAction} value={searchInput}></input>
-                        </div>
-                        <div className='pagination'>
-                            <div className='custom-select'>
-                                <select onChange={(e) => {changeEntriesToShow(e.target.value)}}>
-                                    {config.entriesOptions.map((e, index) => {
-                                        return (
-                                            <option key={index} value={e}>{e}</option>
-                                        )
-                                    })}
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                : 
-                <>
-                    {config.searchable &&
-                        <div className='table-search-option'>
-                            <div className='searchBar'>
-                                <input type="text" id='searchInput' onChange={searchAction} value={searchInput}></input>
-                            </div>
-                        </div>
-                    }
-                    {
-                        config.pagination && 
-                        <div className='table-pagination-option'>
-                            <div className='pagination'>
-                                <div className='custom-select'>
-                                    <select onChange={(e) => {changeEntriesToShow(e.target.value)}}>
-                                        {config.entriesOptions.map((e, index) => {
-                                            return (
-                                                <option key={index} value={e}>{e}</option>
-                                            )
-                                        })}
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                </>}
+            <TableOptions config={config} searchInput={searchInput} handlePagination={handlePagination}
+                          setEntriesToShow={setEntriesToShow} isLoaded={isLoaded} setSearchInput={setSearchInput}
+                          toRender={toRender} currentPage={currentPage} setToRender={setToRender}
+                          entriesToShow={entriesToShow} entriesCount={entriesCount}
+            />
             <div className='table-container'>
                 <table className='table-bordered'>
-                    <TableHead config={config} sortTable={sortTable} />
-                    <TableBody toRender={toRender} columns={config.columns} />
+                    {isLoaded &&
+                        <>
+                            <TableHead config={config} toRender={toRender} currentPage={currentPage} entriesToShow={entriesToShow}
+                                       entriesCount={entriesCount} handlePagination={handlePagination} setToRender={setToRender}
+                            />
+                            <TableBody toRender={toRender} columns={config.columns} />
+                        </>
+                    }
                 </table>
-                {config.pagination && 
-                    <div className='pagination-info'>
-                        <div className='pagination-desc'>
-                            <p>Show {config.rows.length < entriesToShow ? config.rows.length : toRender.length} entries of {config.rows.length}</p>
-                            {numberOfPage > 1 &&
-                                <p>Page {currentPage} of {numberOfPage}</p>
-                            }
-                        </div>
-                        {numberOfPage > 1 &&
-                            <div className='pagination-options'>  
-                                <button onClick={() => {handlePagination('prev')}} className="pagination-btn pagination-prev"><FontAwesomeIcon icon={faChevronLeft} /></button>
-                                <div className='page-btn'>
-                                    {pageList !== null && pageList.map((e, index) => {
-                                        if(e === currentPage) {
-                                            return (
-                                                <button onClick={() => {handlePagination(e)}} key={index} className="pagination-page-btn page-btn-active" >{e}</button>
-                                            )
-                                        } else {
-                                            return (
-                                                <button onClick={() => {handlePagination(e)}} key={index} className="pagination-page-btn" >{e}</button>
-                                            )
-                                        }
-                                    })}
-                                </div>
-                                <button onClick={() => {handlePagination('next')}} className="pagination-btn pagination-next" ><FontAwesomeIcon icon={faChevronRight} /></button>
-                            </div>
-                        }
-                    </div>
-                }
+                <TableFooter config={config} entriesToShow={entriesToShow} toRender={toRender} numberOfPage={numberOfPage} currentPage={currentPage} handlePagination={handlePagination} pageList={pageList} isLoaded={isLoaded} />
             </div>
         </div>
     )
