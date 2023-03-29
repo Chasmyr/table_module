@@ -3,6 +3,7 @@
 .table-module {
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
+    margin: 10px 5px;
 }
 
 .table-bordered {
@@ -43,27 +44,30 @@
 }
 
 .table-title {
-    margin: 5px;
+    margin: 0;
 }
 
 .table-full-options {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 10px 0;
+    margin: 0;
+    margin-bottom: 10px;
 }
 
 .table-search-option {
     display: flex;
     align-items: center;
-    margin: 10px 0;
+    margin: 0;
+    margin-bottom: 10px;
 }
 
 .table-pagination-option {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    margin: 10px 0;
+    margin: 0;
+    margin-bottom: 10px;
 }
 
 .custom-select select {
@@ -120,6 +124,10 @@
     border-radius: 5px;
     border: 1px solid black;
     cursor: pointer;
+}
+
+.pagination-btn-long {
+    padding: 4px 6px;
 }
 
 .pagination-btn:hover {

@@ -6,17 +6,15 @@ function App() {
     title: 'Test titre tableau',
     searchable: true,
     pagination: true,
-    defaultNumberOfEntries: 2,
+    defaultNumberOfEntries: 1,
     entriesOptions: [2, 4, 6, 8, 10],
     columns: [
       {
         name: 'Name',
-        orderable: false,
         ref: 'name'
       },
       {
         name: 'Hours',
-        orderable: false,
         ref: 'heure'
       },
       {
@@ -26,7 +24,6 @@ function App() {
       },
       {
         name: 'Job',
-        orderable: false,
         ref: 'job'
       },
       {
