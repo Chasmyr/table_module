@@ -1,4 +1,4 @@
-import DisplayTable from "./displayTable"
+import DisplayTable from "./lib/index"
 
 function App() {
 
