@@ -1,6 +1,6 @@
 {
   "name": "oc-table-module",
-  "version": "1.0.1",
+  "version": "1.0.4",
   "description": "Generate a table to display, order and search throught data.",
   "license": "MIT",
   "author": {
