@@ -3,6 +3,9 @@ This module have been created for an OpenClassroom project.
 It's build with React and Javascript.
 It generates a table with those functionality : order column, search, paginate.
 
+# Installation
+Run the following command: `npm install oc-table-module`
+
 # How to use it
 To works it need an object in props called **config**.
 
