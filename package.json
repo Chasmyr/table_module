@@ -1,28 +1,50 @@
 {
   "name": "oc-table-module",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Generate a table to display, order and search throught data.",
   "license": "MIT",
-  "type": "module",
-  "main" : "dist/index.js",
-  "module": "dist/index.js",
-  "files": ["dist", "README.md"],
   "author": {
-    "name": "Le Strat Gabin",
+    "name": "Chasmyr",
     "url": "https://github.com/Chasmyr"
   },
+  "main": "dist/oc-table-module.umd.js",
+  "module": "dist/oc-table-module.es.js",
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "keywords": [
     "react",
     "javascript",
     "table"
   ],
+  "exports": {
+    ".": {
+      "import": "./dist/oc-table-module.es.js",
+      "require": "./dist/oc-table-module.umd.js"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Chasmyr/table_module.git"
   },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "node": true,
+      "es2020": true
+    },
+    "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended"
+    ],
+    "parserOptions": {
+      "sourceType": "module"
+    }
+  },
   "scripts": {
     "dev": "vite",
-    "build": "rm -rf dist && NODE_ENV=production babel src/lib --out-dir dist --copy-files --ignore __tests__,spec.js,test.js,__snapshots__",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -31,12 +53,13 @@
     "@fortawesome/react-fontawesome": "^0.2.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.21.0",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
     "@vitejs/plugin-react": "^3.1.0",
     "babel-cli": "^6.26.0",
-    "vite": "^4.2.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "vite": "^4.2.0"
   }
 }

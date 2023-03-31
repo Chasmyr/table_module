@@ -25,8 +25,6 @@ const TableFooter = ({config, entriesToShow, toRender, numberOfPage, currentPage
         }
     }, [pageList, currentPage])
 
-    console.log(newPageList)
-
     if(isLoaded && config.pagination) {
         return (
             <div className='pagination-info'>

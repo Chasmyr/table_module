@@ -1,1 +1,0 @@
-export {DisplayTable} from './displayTable/index'

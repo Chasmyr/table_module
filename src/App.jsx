@@ -87,9 +87,7 @@ function App() {
   }
 
   return (
-    <>
       <DisplayTable config={tableConf} />
-    </>
   )
 }
 
