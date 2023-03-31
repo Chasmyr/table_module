@@ -64,5 +64,6 @@ This module is using font awesome for react.
 # Knowed issues
 
 The table isnt responsive yet for screen < 400px.
+
 The only date format handled is MM/DD/YYYY.
 
